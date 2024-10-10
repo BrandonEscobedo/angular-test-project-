@@ -1,1 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.spacer{
+    flex:1 1 auto;
+}
+.mat-mdc-form-field{
+    margin-top: 10px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.MainSection{
+    margin: 1em;
+}
+.icon-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  mat-list-item{
+   margin-bottom: 15px;
+  }
+  .mat-drawer-inner-container{
+    background-color: antiquewhite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  mat-drawer-container{
+    background-color: antiquewhite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  mat-nav-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:140px;
+    justify-content: center;
+  }
+  span {
+    font-size: 14px; /* Tamaño del texto ajustable */
+    margin-top: 4px; /* Espaciado entre el icono y el texto */
+  }
