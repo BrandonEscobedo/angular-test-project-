@@ -1,10 +1,11 @@
-import { Component, output } from '@angular/core';
+import { Component, computed, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterOutlet } from '@angular/router';
+import { ListComponent } from "../../features/contacts/list/list.component";
 
 const MATERIAL_MODULES = [
   MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatListModule, RouterOutlet
@@ -12,57 +13,43 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [MATERIAL_MODULES],
+  imports: [MATERIAL_MODULES, ListComponent],
   template: `
-   
-<mat-drawer-container class="sideBarContainer" >
-    <mat-drawer #drawer opened="true" mode="side" class="sideBarContainer">
-    <mat-nav-list >
-    <mat-list-item>
-        <a mat-button routerLink="/">
-          <div class="icon-text">
-            <mat-icon>folder</mat-icon>
-           
-          </div>
-          <span>Proyectos</span>
-        </a>
-      </mat-list-item>
-  
+   <mat-toolbar >
+<button mat-icon-button (click)="colapsed.set(!colapsed())"><mat-icon>menu</mat-icon></button>
+   </mat-toolbar>
+   <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav opened mode="side" [style.width]="sideNavWidth()">
+<mat-nav-list>
+  <a href="" mat-list-item>
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>
+      Contacts 
+    </span>
+  </a>
+</mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content [style.margin-left]="sideNavWidth()" class="content">
+    <section>
+    <router-outlet ></router-outlet>
 
-      <mat-list-item>
-        <a mat-button routerLink="/">
-          <div class="icon-text">
-            <mat-icon>home</mat-icon>
-           
-          </div>
-          <span>Home</span>
-        </a>
-      </mat-list-item>
-      <mat-list-item>
-        <a mat-button routerLink="/">
-          <div class="icon-text">
-            <mat-icon>home</mat-icon>
-           
-          </div>
-          <span>Home</span>
-        </a>
-      </mat-list-item>
-    </mat-nav-list>
-    </mat-drawer>
-      <mat-drawer-content >
-<div style="text-align:center;">
-<router-outlet>
+    </section>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 
-</router-outlet>   
-</div>
-   </mat-drawer-content>
-   
-</mat-drawer-container>
 
   `,
-  styles: ``
+  styles: `
+  mat-sidenav-container {
+    height: cal(100vh-64px);
+  }
+  .content{
+    padding:10px;
+  }`
 })
 export class ToolbarComponent {
+colapsed=signal(false);
+sideNavWidth=computed(()=>this.colapsed()? '65px' :'250px');
   onNewContactEvent = output<void>();
   emittedClick(): void {
     this.onNewContactEvent.emit();
