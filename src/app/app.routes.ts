@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-
+import { CrearComponent } from '@components/crear/crear.component';
+ 
 export const routes: Routes = [
     {
         path:'', redirectTo:'/contacts', pathMatch:'full',   
@@ -9,5 +10,8 @@ export const routes: Routes = [
     },
     {
         path:'**',redirectTo:'/contacts'
+    },
+    {
+        path:'crear',component:CrearComponent
     }
 ];

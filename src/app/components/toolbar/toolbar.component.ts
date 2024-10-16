@@ -4,11 +4,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ListComponent } from "../../features/contacts/list/list.component";
+import { CommonModule } from '@angular/common';
 
 const MATERIAL_MODULES = [
-  MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatListModule, RouterOutlet
+  MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatListModule, RouterOutlet, RouterLink,RouterLinkActive, CommonModule
 ];
 @Component({
   selector: 'app-toolbar',
@@ -21,6 +22,24 @@ const MATERIAL_MODULES = [
    <mat-sidenav-container class="sidenav-container">
     <mat-sidenav opened mode="side" [style.width]="sideNavWidth()">
 <mat-nav-list>
+<a href="" mat-list-item routerLink="/contacts" >
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>
+      Lista 
+    </span>
+  </a>
+  <a mat-list-item routerLink="crear" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <mat-icon routerLink="crear" routerLinkActive="active" ariaCurrentWhenActive="page" matListItemIcon>home</mat-icon>
+    <span routerLink="crear" routerLinkActive="active" ariaCurrentWhenActive="page" matListItemTitle>
+      Usuarios 
+    </span>
+  </a>
+  <a href="" mat-list-item>
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>
+      Roles
+    </span>
+  </a>
   <a href="" mat-list-item>
     <mat-icon matListItemIcon>home</mat-icon>
     <span matListItemTitle>
@@ -31,8 +50,7 @@ const MATERIAL_MODULES = [
     </mat-sidenav>
     <mat-sidenav-content [style.margin-left]="sideNavWidth()" class="content">
     <section>
-    <router-outlet ></router-outlet>
-
+    <router-outlet></router-outlet>
     </section>
     </mat-sidenav-content>
   </mat-sidenav-container>
@@ -49,7 +67,7 @@ const MATERIAL_MODULES = [
 })
 export class ToolbarComponent {
 colapsed=signal(false);
-sideNavWidth=computed(()=>this.colapsed()? '65px' :'250px');
+sideNavWidth=computed(()=>this.colapsed()? '65px' :'200px');
   onNewContactEvent = output<void>();
   emittedClick(): void {
     this.onNewContactEvent.emit();
