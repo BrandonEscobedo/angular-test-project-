@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { GridComponent } from '@components/grid/grid.component';
 import { MatIcon } from '@angular/material/icon';
 import { NgModel } from '@angular/forms';
+import{CellEstadoComponent} from '@components/cell-estado/cell-estado.component';
 const ELEMENT_DATA: any[] = [
   { position: 1, name: 'Hydrogen', weight: 1.0079, rol: 'H' },
   { position: 2, name: 'Helium', weight: 4.0026, rol: 'He' },
@@ -10,7 +11,7 @@ const ELEMENT_DATA: any[] = [
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [GridComponent, MatIcon],
+  imports: [GridComponent, MatIcon,CellEstadoComponent],
   template: `
 <section>
 @if(data){
@@ -19,7 +20,7 @@ const ELEMENT_DATA: any[] = [
 }
 </section>
 <ng-template #rolTemplate let-value let-element="element">
-<p>papu</p>
+<app-cell-estado [value]="value" [element]="element"></app-cell-estado>
 </ng-template>
   `,
   styles: ``

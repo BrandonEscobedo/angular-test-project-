@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-cell-estado',
   standalone: true,
   imports: [],
   template: `
-    <p>
-      cell-estado works!
-    </p>
+<p>papu</p>
+
   `,
   styles: ``
 })
 export class CellEstadoComponent {
-
+  @Input() value: any; 
+  @Input() element: any; 
 }
