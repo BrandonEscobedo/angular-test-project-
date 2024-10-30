@@ -9,7 +9,7 @@ import { ListComponent } from "../../features/contacts/list/list.component";
 import { CommonModule } from '@angular/common';
 
 const MATERIAL_MODULES = [
-  MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatListModule, RouterOutlet, RouterLink,RouterLinkActive, CommonModule
+  MatToolbarModule, MatIconModule, MatButtonModule, MatSidenavModule, MatListModule, RouterOutlet, RouterLink, RouterLinkActive, CommonModule
 ];
 @Component({
   selector: 'app-toolbar',
@@ -40,10 +40,10 @@ const MATERIAL_MODULES = [
       Roles
     </span>
   </a>
-  <a href="" mat-list-item>
+  <a mat-list-item routerLink="/proyectos">
     <mat-icon matListItemIcon>home</mat-icon>
     <span matListItemTitle>
-      Contacts 
+      Proyectos 
     </span>
   </a>
 </mat-nav-list>
@@ -66,8 +66,8 @@ const MATERIAL_MODULES = [
   }`
 })
 export class ToolbarComponent {
-colapsed=signal(false);
-sideNavWidth=computed(()=>this.colapsed()? '65px' :'200px');
+  colapsed = signal(false);
+  sideNavWidth = computed(() => this.colapsed() ? '65px' : '200px');
   onNewContactEvent = output<void>();
   emittedClick(): void {
     this.onNewContactEvent.emit();

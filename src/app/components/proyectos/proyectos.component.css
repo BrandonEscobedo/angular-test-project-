@@ -1,0 +1,9 @@
+.form_container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-gap: 20px;
+    grid-column: 200px;
+}
+.p-stepper {
+    flex-basis: 50rem;
+} 

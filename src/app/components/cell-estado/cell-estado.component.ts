@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-cell-estado',
   standalone: true,

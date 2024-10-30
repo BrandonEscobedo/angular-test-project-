@@ -9,9 +9,9 @@ export const routes: Routes = [
         path:'contacts',loadChildren:()=>import('./features/contacts/contacts.routes'),
     },
     {
-        path:'**',redirectTo:'/contacts'
+        path:'crear',component:CrearComponent
     },
     {
-        path:'crear',component:CrearComponent
+        path:'proyectos',loadComponent:()=>import('./components/proyectos/proyectos.component').then(X=>X.ProyectosComponent)
     }
 ];
