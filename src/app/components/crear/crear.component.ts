@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogContent } from '@angular/material/dialog';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -10,7 +10,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
 export enum EstatusEnum {
   Activo = 'Activo',
   Pendiente = 'Pendiente',
@@ -55,43 +54,63 @@ export class CrearComponent implements OnInit {
       nombre: ['', Validators.required],
       apellido: [''],
       telefono: [''],
-      estatusProyecto: this._fb.array([])
+      estatusProyecto: this._fb.array([], [this.alMenosUnEstadoCompleto(), this.alMenosUnEstadoActivoYCompleto()])
     });
 
     this.agregarEstatusIniciales();
 
   }
   onsubmit() {
-    console.log(this.contactForm.value);
+    if (this.contactForm.valid) {
+      console.log(this.contactForm.value);
+    }else{
+      //alarta primeng
+    }
   }
   agregarEstatusIniciales() {
-    // Loop over the EstadoNombre enum values to add them to the form
     Object.values(EstatusEnum).forEach(nombreEstado => {
       const estatusFormGroup = this._fb.group({
         nombre: new FormControl(nombreEstado),
-        descripcion: new FormControl(''),
-        fechaInicio: new FormControl(''),
-        fechaFin: new FormControl(''),
         fechaActualizacion: new FormControl(''),
-        comentarios: new FormControl(''),
+        Comentarios: new FormControl(''),
         actual: new FormControl(false)
       });
       this.estatusProyecto.push(estatusFormGroup);
     });
   }
-  alMenosUnEstadoCompleto(formArray: FormArray): { [key: string]: boolean } | null {
-    const hasAtLeastOneCompleted = formArray.controls.some(control => {
-      const descripcion = control.get('descripcion')?.value;
-      const fechaInicio = control.get('fechaInicio')?.value;
-      const fechaFin = control.get('fechaFin')?.value;
-      // Add more fields if needed
-      return !!(descripcion || fechaInicio || fechaFin);
-    });
+  alMenosUnEstadoCompleto(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control instanceof FormArray) {
+        const hasAtLeastOneCompleted = control.controls.some(estatusControl => {
+          const Comentarios = estatusControl.get('Comentarios')?.value;
+          const fechaActualizacion = estatusControl.get('fechaActualizacion')?.value;
+          return !!(Comentarios && fechaActualizacion);
+        });
+        return hasAtLeastOneCompleted ? null : { alMenosUnoRequerido: true };
+      }
+      return null;
+    };
+  }
+  alMenosUnEstadoActivoYCompleto(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control instanceof FormArray) {
+        const hasValidActiveStatus = control.controls.some(estatusControl => {
+          const isActive = estatusControl.get('actual')?.value;
+          const Comentarios = estatusControl.get('Comentarios')?.value;
+          const fechaActualizacion = estatusControl.get('fechaActualizacion')?.value;
 
-    return hasAtLeastOneCompleted ? null : { alMenosUnoRequerido: true };
+          if (isActive) {
+            return Comentarios && fechaActualizacion ;
+          }
+          return false;
+        });
+
+        return hasValidActiveStatus ? null : { activoCompletoRequerido: true };
+      }
+      return null;
+    };
   }
   setEstatusActual(index: number) {
-    // Mark one as "actual" and the others as false
     this.estatusProyecto.controls.forEach((estatus, i) => {
       estatus.patchValue({ actual: i === index });
     });

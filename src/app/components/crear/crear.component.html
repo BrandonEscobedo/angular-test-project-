@@ -36,42 +36,29 @@
                 <mat-step *ngFor="let estatus of estatusProyecto.controls; let i = index" [stepControl]="estatus">
                     <div [formGroupName]="i">
                         <ng-template matStepLabel>{{ estatus.get('nombre')?.value }}</ng-template>
-
-                        <mat-form-field appearance="fill">
-                            <mat-label>Descripción</mat-label>
-                            <input matInput formControlName="descripcion" placeholder="Descripción del estado" />
-                          </mat-form-field>
-                  
-                          <mat-form-field>
-                            <mat-label>Choose a date</mat-label>
-                            <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicio">
-                            <mat-hint>MM/DD/YYYY</mat-hint>
-                            <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-                            <mat-datepicker #pickerInicio></mat-datepicker>
-                          </mat-form-field>
-                          
-                          <mat-form-field>
-                            <mat-label>Choose a date</mat-label>
-                            <input matInput [matDatepicker]="pickerFin" formControlName="fechaFin">
-                            <mat-hint>MM/DD/YYYY</mat-hint>
-                            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
-                            <mat-datepicker #pickerFin></mat-datepicker>
-                          </mat-form-field>
-                            
-                          <mat-form-field appearance="fill">
-                            <mat-label>Comentarios</mat-label>
-                            <textarea matInput formControlName="comentarios" placeholder="Comentarios"></textarea>
-                          </mat-form-field>
-                  
-                          <mat-checkbox formControlName="actual" (change)="setEstatusActual(i)">
-                            Estatus Actual
-                          </mat-checkbox>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Comentarios</mat-label>
+                                <input matInput formControlName="Comentarios" placeholder="Descripción del estado" />
+                              </mat-form-field>
+                      
+                              <mat-form-field>
+                                <mat-label>Choose a date</mat-label>
+                                <input matInput [matDatepicker]="pickerInicio" formControlName="fechaActualizacion">
+                                <mat-hint>MM/DD/YYYY</mat-hint>
+                                <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerInicio></mat-datepicker>
+                              </mat-form-field>
+        
+                      
+                              <mat-checkbox  formControlName="actual" (change)="setEstatusActual(i)">
+                                Estatus Actual
+                              </mat-checkbox>                
 
                     </div>
 
                 </mat-step>
             </mat-stepper>
         </div>
-        <button type="submit" >Enviar</button>
+        <button type="submit">Enviar</button>
     </form>
 </div>
