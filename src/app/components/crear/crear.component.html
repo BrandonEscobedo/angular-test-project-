@@ -1,6 +1,6 @@
 <div mat-dialog-tittle>
     <h1>Crear Contacto</h1>
-    <form action="" [formGroup]="contactForm" (ngSubmit)="onsubmit()">
+    <form [formGroup]="contactForm" (ngSubmit)="onsubmit()">
         <div mat-dialog-content class="content">
             <div class="row">
                 <mat-form-field class="full-width" appearance="outline">
@@ -27,9 +27,51 @@
                 </mat-form-field>
             </div>
             <div mat-dialog-actions class="actions">
-                <button mat-raised-button type="button"  (click)="Enviar()">Cancelar</button>
+                <button mat-raised-button type="button">Cancelar</button>
                 <button [disabled]="!contactForm.valid" at-raised-button color="primary" type="submit">Guardar </button>
             </div>
         </div>
+        <div formArrayName="estatusProyecto">
+            <mat-stepper #stepper>
+                <mat-step *ngFor="let estatus of estatusProyecto.controls; let i = index" [stepControl]="estatus">
+                    <div [formGroupName]="i">
+                        <ng-template matStepLabel>{{ estatus.get('nombre')?.value }}</ng-template>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Descripción</mat-label>
+                            <input matInput formControlName="descripcion" placeholder="Descripción del estado" />
+                          </mat-form-field>
+                  
+                          <mat-form-field>
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicio">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerInicio></mat-datepicker>
+                          </mat-form-field>
+                          
+                          <mat-form-field>
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="pickerFin" formControlName="fechaFin">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerFin></mat-datepicker>
+                          </mat-form-field>
+                            
+                          <mat-form-field appearance="fill">
+                            <mat-label>Comentarios</mat-label>
+                            <textarea matInput formControlName="comentarios" placeholder="Comentarios"></textarea>
+                          </mat-form-field>
+                  
+                          <mat-checkbox formControlName="actual" (change)="setEstatusActual(i)">
+                            Estatus Actual
+                          </mat-checkbox>
+
+                    </div>
+
+                </mat-step>
+            </mat-stepper>
+        </div>
+        <button type="submit" >Enviar</button>
     </form>
 </div>
