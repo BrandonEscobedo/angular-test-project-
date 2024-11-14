@@ -8,12 +8,22 @@ import { MatInput } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { StepperModule } from 'primeng/stepper';
+import { StepsModule } from 'primeng/steps';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { StepperComponent } from "../stepper/stepper.component";
 export enum EstatusEnum {
   Activo = 'Activo',
   Pendiente = 'Pendiente',
-  Desarrollo = 'Desarrollo'
+  Desarrollo = 'Desarrollo',
+  Analisis = 'Analisis',
+  Cancelado = 'Cancelado',
+  noAprobado = 'noAprobado',
+  Cerrado = 'Cerrado',
+  Implementacion = 'Implementacion',
+
 }
 interface Estatus {
   nombre: string;
@@ -24,8 +34,7 @@ interface Estatus {
   selector: 'app-crear',
   standalone: true,
   imports: [MatLabel, MatFormField, MatInput, MatDialogContent,
-    CommonModule, ReactiveFormsModule, MatStepperModule, MatDatepickerModule, FormsModule,MatCheckboxModule,MatFormFieldModule
-  ],
+    CommonModule, ReactiveFormsModule, MatStepperModule, MatDatepickerModule, FormsModule, MatCheckboxModule, MatFormFieldModule, StepperModule, StepsModule, StepperComponent],
   templateUrl: './crear.component.html',
   styleUrl: './crear.component.css',
   providers: [{
@@ -35,38 +44,59 @@ interface Estatus {
 })
 export class CrearComponent implements OnInit {
   contactForm: FormGroup = new FormGroup({});
-  estatusList: Estatus[] = [];
-
+  selectedStepIndex: number = 0; // índice del paso actual
   private readonly _fb = inject(FormBuilder);
-
+  stepList: any[] = [{
+    stepname: 'Paso 1',
+    isComplete: false
+  }, {
+    stepname: 'Paso 2',
+    isComplete: false
+  },
+  {
+    stepname: 'Paso 3',
+    isComplete: false
+  },
+  {
+    stepname: 'Paso 4',
+    isComplete: false
+  },
+  {
+    stepname: 'Paso 5',
+    isComplete: false
+  }
+  ]
+  porcentajeCompletado: number = 8;
+  activeStep: any = this.stepList[0];
+  setActiveStep(step: any) {
+    this.activeStep = step;
+    this.porcentajeCompletado = 30;
+  }
   ngOnInit(): void {
     this._buildForm();
   }
-  constructor() {
+
+  goStep() {
 
   }
   get estatusProyecto(): FormArray {
     return this.contactForm.get('estatusProyecto') as FormArray;
   }
+  activeIndex: number = -1;  // Ningún paso visible al inicio
   private _buildForm(): void {
-    // Main form with FormArray for project statuses
     this.contactForm = this._fb.group({
       nombre: ['', Validators.required],
       apellido: [''],
       telefono: [''],
-      estatusProyecto: this._fb.array([], [this.alMenosUnEstadoCompleto(), this.alMenosUnEstadoActivoYCompleto()])
+      estatusProyecto: this._fb.array([])
     });
-
     this.agregarEstatusIniciales();
+  }
 
+  onStepChange(event: any): void {
+    this.selectedStepIndex = event.selectedIndex;
   }
-  onsubmit() {
-    if (this.contactForm.valid) {
-      console.log(this.contactForm.value);
-    }else{
-      //alarta primeng
-    }
-  }
+
   agregarEstatusIniciales() {
     Object.values(EstatusEnum).forEach(nombreEstado => {
       const estatusFormGroup = this._fb.group({
@@ -78,38 +108,13 @@ export class CrearComponent implements OnInit {
       this.estatusProyecto.push(estatusFormGroup);
     });
   }
-  alMenosUnEstadoCompleto(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control instanceof FormArray) {
-        const hasAtLeastOneCompleted = control.controls.some(estatusControl => {
-          const Comentarios = estatusControl.get('Comentarios')?.value;
-          const fechaActualizacion = estatusControl.get('fechaActualizacion')?.value;
-          return !!(Comentarios && fechaActualizacion);
-        });
-        return hasAtLeastOneCompleted ? null : { alMenosUnoRequerido: true };
-      }
-      return null;
-    };
-  }
-  alMenosUnEstadoActivoYCompleto(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control instanceof FormArray) {
-        const hasValidActiveStatus = control.controls.some(estatusControl => {
-          const isActive = estatusControl.get('actual')?.value;
-          const Comentarios = estatusControl.get('Comentarios')?.value;
-          const fechaActualizacion = estatusControl.get('fechaActualizacion')?.value;
 
-          if (isActive) {
-            return Comentarios && fechaActualizacion ;
-          }
-          return false;
-        });
-
-        return hasValidActiveStatus ? null : { activoCompletoRequerido: true };
-      }
-      return null;
-    };
+  onsubmit() {
+    if (this.contactForm.valid) {
+      console.log(this.contactForm.value);
+    }
   }
+
   setEstatusActual(index: number) {
     this.estatusProyecto.controls.forEach((estatus, i) => {
       estatus.patchValue({ actual: i === index });

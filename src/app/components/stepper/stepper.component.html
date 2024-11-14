@@ -1,0 +1,25 @@
+<div class="stepper-container">
+    <div class="steps">
+      <!-- Barra de progreso -->
+      <div class="progress-bar" [style.width.%]="porcentajeCompletado"></div>
+      
+      <!-- Botones de pasos -->
+      <div *ngFor="let step of stepList; let i = index" class="step" (click)="setActiveStep(step)">
+        <div class="step-circle" [class.active]="activeStep === step">{{ i + 1 }}</div>
+        <div class="step-label">{{ step.stepname }}</div>
+      </div>
+    </div>
+  
+    <!-- Contenido del paso activo -->
+    <div class="step-content">
+      <ng-container *ngIf="activeStep">
+        <!-- Renderizar el contenido del componente padre usando ng-content -->
+        <ng-container *ngTemplateOutlet="activeStepTemplate"></ng-container>
+      </ng-container>
+    </div>
+  </div>
+  
+  <ng-template #activeStepTemplate>
+    <ng-content></ng-content>
+  </ng-template>
+  
