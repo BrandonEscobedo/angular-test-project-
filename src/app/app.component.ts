@@ -4,14 +4,15 @@ import { ToolbarComponent } from "./components/toolbar/toolbar.component";
 import { MatCardModule } from '@angular/material/card';
 import { ListComponent } from "./features/contacts/list/list.component";
 import { CrearComponent } from '@components/crear/crear.component';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 const MATERIAL_MODULES = [
   MatCardModule
 ];
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToolbarComponent, MATERIAL_MODULES, ListComponent, CrearComponent],
+  imports: [ToolbarComponent, MATERIAL_MODULES],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -46,6 +46,12 @@ const MATERIAL_MODULES = [
       Proyectos 
     </span>
   </a>
+  <a mat-list-item routerLink="/proyects">
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>
+      Ver Proyecto 
+    </span>
+  </a>
 </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content [style.margin-left]="sideNavWidth()" class="content">

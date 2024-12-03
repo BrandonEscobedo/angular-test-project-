@@ -13,5 +13,10 @@ export const routes: Routes = [
     },
     {
         path:'proyectos',loadComponent:()=>import('./components/proyectos/proyectos.component').then(X=>X.ProyectosComponent)
+    },
+    {
+        path:'verProyecto',loadComponent:()=>import('./components/vista-proyecto/vista-proyecto.component').then(X=>X.VistaProyectoComponent)
+    },{
+        path:'proyects',loadComponent:()=>import('../app/features/contacts/proyecto/componente-final/componente-final.component').then(X=>X.ComponenteFinalComponent)
     }
 ];
