@@ -11,28 +11,24 @@ import { ComponentService } from 'src/app/services/component.service';
    <div class="Content">
     componente 3
     <div>
-      <p>Proyecto: {{proyectoNuevo?.nombre}}</p>
+      <p>Proyecto: {{proyecto?.nombre}}</p>
       <input 
       type="text" 
-      [(ngModel)]="nombre"
-      (ngModelChange)="EnviarProyecto(nombre)"
+      [(ngModel)]="proyecto.nombre"
+     
     >
     </div>
    </div>
   `,
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class Componente3Component {
-  nombre: string = "";
-  proyectoNuevo: proyecto | null = null;
   proyectoService = inject(ComponentService);
+  proyecto: proyecto=new proyecto();
+
   constructor() {
     effect(() => {
-      this.proyectoNuevo = this.proyectoService.proyecto();
-    })
-  }
-  EnviarProyecto(nombre: string): void {
-    var proyectoEnviar = new proyecto();
-    proyectoEnviar.nombre = nombre;
-    this.proyectoService.seleccionarProyecto(proyectoEnviar);
+      this.proyecto = this.proyectoService.proyectonuevo();
+    });
   }
 }

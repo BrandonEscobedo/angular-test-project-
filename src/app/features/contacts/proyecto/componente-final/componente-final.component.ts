@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { Componente1Component } from "../componente1/componente1.component";
 import { ProyectosService } from '@components/servicios/proyectos.service';
 import { proyecto } from 'src/app/data/proyectos.model';
@@ -11,28 +11,26 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [Componente1Component, CommonModule, FormsModule],
   template: `
-    padre
+        <p>Proyecto: {{proyecto?.nombre}}</p>
+
     <app-componente1></app-componente1>en padre
     <input 
       type="text" 
-      [(ngModel)]="nombre"
-      (ngModelChange)="EnviarProyecto(nombre)"
+      [(ngModel)]="proyecto.nombre"
+      placeholder="en final"
     >
   `,
-  styles: ``
+  styles: ``,
+  changeDetection:ChangeDetectionStrategy.OnPush
+
 })
 export class ComponenteFinalComponent {
-  nombre: string = "";
   proyectoService = inject(ComponentService);
-
-  EnviarProyecto(nombre: string): void {
-    const proyectoEnviar = new proyecto();
-    proyectoEnviar.nombre = nombre;
-    this.proyectoService.seleccionarProyecto(proyectoEnviar);
-  }
+  proyecto: proyecto=new proyecto();
 
   constructor() {
-    // Inicializar el proyecto en el servicio
-    this.EnviarProyecto(this.nombre);
+    effect(() => {
+      this.proyecto = this.proyectoService.proyectonuevo();
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { Componente2Component } from "../componente2/componente2.component";
 import { Componente3Component } from "../componente3/componente3.component";
 import { ComponentService } from 'src/app/services/component.service';
@@ -38,14 +38,16 @@ import { proyecto } from 'src/app/data/proyectos.model';
       display:flex;
     background-color: blue;
       color:white;
-    }`
+    }`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Componente1Component {
-  proyectoNuevo: proyecto | null = null;
+  proyectoNuevo!: proyecto;
   proyectoService = inject(ComponentService);
   constructor() {
     effect(() => {
-      this.proyectoNuevo = this.proyectoService.proyecto();
-    })
+      this.proyectoNuevo = this.proyectoService.proyectonuevo();
+    });
+
   }
 }
